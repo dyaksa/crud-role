@@ -1,4 +1,5 @@
 const authModel = require("../model/authModel");
+const jwt = require('jsonwebtoken');
 
 module.exports = {
     postRegister: async (req,res) => {
@@ -37,9 +38,30 @@ module.exports = {
 
     postLogin: async (req,res) => {
         try {
-            const { email,password } = req.body;
+            const data = req.body;
+            const user = await authModel.login(data);
+            console.log(user);
+            const token = jwt.sign({
+                id: user.id,
+                email: user.email,
+                position: user.position,
+                roles: user.roles
+            },process.env.JWT_SECRET_KEY);
+            return res.status(200).send({
+                status: 200,
+                success: true,
+                accessToken: token,
+            })
         }catch(err){
-            console.log(err);
+            return res.status(500).send({
+                status: 500,
+                success: false,
+                message: `internal server error`,
+                error: {
+                    status: true,
+                    message: err.message
+                }
+            })
         }
     }
 }

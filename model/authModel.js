@@ -23,7 +23,23 @@ module.exports = {
     login: (data) => {
         const { email,password } = data;
         return new Promise((resolve,reject) => {
-            
+            const query = `SELECT 
+            users.id, users.username, users.email, users.password, p.name as position, p.roles_id as roles
+            FROM users
+            INNER JOIN position as p ON users.position_id = p.id
+            WHERE email = '${email}'`;
+            db.query(query, (err,result) => {
+                if(result.length){
+                    const passwordIsValid = bcrypt.compareSync(password, result[0].password);
+                    if(passwordIsValid){
+                        resolve(result[0]);
+                    }else{
+                        reject(new Error('password not match'));
+                    }
+                }else{
+                    reject(new Error("email not exists"));
+                }
+            })
         })
     }
 }
