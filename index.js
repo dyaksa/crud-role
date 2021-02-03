@@ -7,6 +7,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 const authRoutes = require("./routes/authRoute");
+const eventRoutes = require("./routes/eventRoute");
 
 app.get("/",(req,res) => {
     res.status(200).send({
@@ -15,8 +16,10 @@ app.get("/",(req,res) => {
     })
 })
 
-//register new user
+//auth
 app.use("/api/v1/user", authRoutes);
+//event
+app.use("/api/v1/event", eventRoutes);
 
 app.listen(process.env.PORT, () => {
     console.log(`server success running on port ${process.env.PORT}`);

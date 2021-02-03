@@ -2,7 +2,7 @@ const authModel = require("../model/authModel");
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-    postRegister: async (req,res) => {
+    register: async (req,res) => {
         try{
             const data = req.body;
             const regist = await authModel.register(data);
@@ -36,11 +36,10 @@ module.exports = {
         }
     },
 
-    postLogin: async (req,res) => {
+    login: async (req,res) => {
         try {
             const data = req.body;
             const user = await authModel.login(data);
-            console.log(user);
             const token = jwt.sign({
                 id: user.id,
                 email: user.email,

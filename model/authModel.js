@@ -41,5 +41,22 @@ module.exports = {
                 }
             })
         })
+    },
+
+    findById: (id) => {
+        return new Promise((resolve,reject) => {
+            const query = `SELECT 
+            users.id, users.username, users.email, users.password, p.name as position, p.roles_id as roles
+            FROM users
+            INNER JOIN position as p ON users.position_id = p.id
+            WHERE users.id = '${id}'`;
+            db.query(query,(err,result) => {
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(new Error('id is not found'));
+                }
+            })
+        })
     }
 }
