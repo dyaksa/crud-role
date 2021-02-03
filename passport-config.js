@@ -1,2 +1,2 @@
 const passport = require('passport');
-const authModel = require("../model/authModel");
+const authModel = require("./model/authModel");
