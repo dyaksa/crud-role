@@ -1,6 +1,7 @@
 const eventModel = require("../model/eventModel");
 const _ = require("lodash"); 
 const { responseData } = require('../utils/responseData');
+const { formData } = require("../utils/formData");
 
 module.exports = {
     getEvents: async (req,res) => {
@@ -88,6 +89,27 @@ module.exports = {
     updatedEvent: async (req,res) => {
         try {
             const { id } = req.params;
+            const body = formData(req.body);
+            const founded = await eventModel.findById(id);
+            if(_.isEmpty(founded)){
+                return res.status(404).send({
+                    status: 404,
+                    success: false,
+                    message: 'error',
+                    error: 'event not found'
+                })
+            }
+            await eventModel.updateById(id, body);
+            return res.status(200).send({
+                status: 200,
+                success: true,
+                message: 'success',
+                data: {
+                    id: founded[0].id,
+                    title: req.body.title,
+                    description: req.body.description
+                }
+            })
         }catch(err){
             return res.status(500).send({
                 status: 500,

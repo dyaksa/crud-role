@@ -39,5 +39,17 @@ module.exports = {
                 }
             })
         });
+    },
+
+    updateById: (id, body) => {
+        return new Promise((resolve,reject) => {
+            db.query(`UPDATE events SET ${body} WHERE id = ${id}`,(err,result) => {
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(err);
+                }
+            })
+        })
     }
 }
