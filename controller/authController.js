@@ -80,5 +80,17 @@ module.exports = {
                 errors: err.message
             })
         }
-    }
+    },
+
+    googleAuthSuccess: async (req,res) => {
+        try {
+
+        }catch(err){
+            return res.status(500).send({
+                status: 500,
+                message: 'error',
+                errors: err.message
+            })
+        }
+    }   
 }

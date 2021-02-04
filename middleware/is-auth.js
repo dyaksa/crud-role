@@ -49,7 +49,7 @@ module.exports = {
                     errors: 'requires a super admin role'
                 })
             }
-            console.log(res[0]);
+            return next();
         }).catch(err => {
             return res.status(500).send({
                 status: 500,

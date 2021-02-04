@@ -19,6 +19,18 @@ module.exports = {
         })
     },
 
+    create: (data) => {
+        return new Promise((resolve,reject) => {
+            db.query('INSERT INTO users SET ?', data, (err, result) => {
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(err.message);
+                }
+            })
+        })
+    },
+
     findByEmail: (email) => {
         return new Promise((resolve,reject) => {
             const query = `SELECT 
@@ -27,10 +39,10 @@ module.exports = {
             INNER JOIN position as p ON users.position_id = p.id
             WHERE users.email = '${email}' LIMIT 1`;
             db.query(query, (err,result) => {
-                if(result.length){
-                    resolve(result);
-                }else{
+                if(!result){
                     reject(err);
+                }else{
+                    resolve(result);
                 }
             })
         })
@@ -39,15 +51,15 @@ module.exports = {
     findById: (id) => {
         return new Promise((resolve,reject) => {
             const query = `SELECT 
-            users.id, users.username, users.email, users.password, p.name as position, p.roles_id as roles
+            users.id, users.email, users.password, p.name as position, p.roles_id as roles
             FROM users
             INNER JOIN position as p ON users.position_id = p.id
-            WHERE users.id = '${id}'`;
+            WHERE users.id = ${id}`;
             db.query(query,(err,result) => {
                 if(!err){
                     resolve(result);
                 }else{
-                    reject(new Error('id is not found'));
+                    reject(new Error(err.message));
                 }
             })
         })
