@@ -27,5 +27,17 @@ module.exports = {
                 }
             })
         })
+    },
+
+    deleteById: (id) => {
+        return new Promise((resolve,reject) => {
+            db.query(`DELETE FROM events WHERE id = ${id}`, (err,result) => {
+                if(!err){
+                    resolve(result);
+                }else{
+                    reject(err);
+                }
+            })
+        });
     }
 }

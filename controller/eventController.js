@@ -1,5 +1,6 @@
 const eventModel = require("../model/eventModel");
 const _ = require("lodash"); 
+const { responseData } = require('../utils/responseData');
 
 module.exports = {
     getEvents: async (req,res) => {
@@ -85,10 +86,45 @@ module.exports = {
     },
 
     updatedEvent: async (req,res) => {
-
+        try {
+            const { id } = req.params;
+        }catch(err){
+            return res.status(500).send({
+                status: 500,
+                success: false,
+                message: 'error',
+                error: err.message
+            })
+        }
     },
 
     deleteEvent: async (req,res) => {
-        
+        try {
+            const { id } = req.params;
+            const found = await eventModel.findById(id);
+            const data = responseData(found[0]);
+            if(!_.isEmpty(found)){
+                await eventModel.deleteById(id);
+                return res.status(202).send({
+                    status: 202,
+                    success: true,
+                    message: 'success',
+                    data: data
+                })
+            }
+            return res.status(404).send({
+                status: 404,
+                success: false,
+                message: 'error',
+                error: 'event not found'
+            })
+        }catch(err){
+            return res.status(500).send({
+                status: 500,
+                success: false,
+                message: 'error',
+                error: err.message
+            })
+        }
     }
 }
